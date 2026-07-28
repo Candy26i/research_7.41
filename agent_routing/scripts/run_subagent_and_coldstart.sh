@@ -75,7 +75,7 @@ echo "[ARCHIVE] $A/reasoner_adapter_${VARIANT}"
 ls -d $A/*/
 
 # ── Step 3: manager coldstart ──
-[ -n "${DEEPSEEK_API_KEY:-}" ] || { echo "[ABORT] DEEPSEEK_API_KEY ; }
+[ -n "${DEEPSEEK_API_KEY:-}" ] || { echo "[ABORT] DEEPSEEK_API_KEY not set"; exit 1; }
 
 CUDA_VISIBLE_DEVICES=0 python -X utf8 -m src.pipeline.cli manager_coldstart_sft \
   --base_model "$BASE_MODEL" --teacher_id "$ID" \

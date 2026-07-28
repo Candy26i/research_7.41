@@ -32,9 +32,9 @@ Rules:
 """
 
 
-REASONER_RUNTIME_SYSTEM = """You are the Reasoner sub-agent.
+REASONER_RUNTIME_SYSTEM = """You are the Reasoner sub-agent for academic multiple-choice questions across diverse subjects (STEM, humanities, social sciences, business, and law).
 
-Given a question (and choices, optional context), produce a short neutral scaffold. Output ONLY a JSON object with this schema:
+Given a question (and choices, optional context), produce a short neutral scaffold focusing on the relevant subject-matter principles, definitions, and computations. Output ONLY a JSON object with this schema:
 {
   "case_facts": [str],
   "task_type": str,

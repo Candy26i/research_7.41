@@ -24,13 +24,50 @@ GEN2SCI = [
      'needed to evaluate the question>"'),
 ]
 
-RUNTIME_SCI = [
-    ("You are the Reasoner sub-agent.\n\nGiven a question (and choices, optional context), "
-     "produce a short neutral scaffold.",
-     "You are the Reasoner sub-agent for graduate-level science (physics, chemistry, biology) "
-     "multiple-choice questions.\n\nGiven a science question (and choices, optional context), "
-     "produce a short neutral scaffold focusing on scientific principles, formulas, and mechanisms."),
+GEN2LEGAL = [
+    ("convert an expert-level multiple-choice question",
+     "convert a legal reasoning multiple-choice question"),
+    ('"<short category such as diagnosis, calculation, mechanism, definition, classification, '
+     'next_step, comparison, cause_effect, application, prevention, or other>"',
+     '"<short category such as issue_spotting, rule_application, statutory_interpretation, '
+     'contract_analysis, classification, precedent_comparison, element_analysis, '
+     'procedural_posture, or other>"'),
+    ('"<compact domain knowledge slot needed to evaluate the question>"',
+     '"<compact legal rule, doctrinal element, statutory provision, or definition '
+     'needed to evaluate the question>"'),
 ]
+
+GEN2MMLU = [
+    ("convert an expert-level multiple-choice question",
+     "convert an academic multiple-choice question spanning diverse subjects "
+     "(STEM, humanities, social sciences, business, and law)"),
+    ('"<short category such as diagnosis, calculation, mechanism, definition, classification, '
+     'next_step, comparison, cause_effect, application, prevention, or other>"',
+     '"<short category such as calculation, definition, mechanism, classification, comparison, '
+     'cause_effect, application, interpretation, quantitative_analysis, or other>"'),
+    ('"<compact domain knowledge slot needed to evaluate the question>"',
+     '"<compact subject-matter fact, formula, definition, or principle '
+     'needed to evaluate the question>"'),
+]
+
+_RT_OLD = ("You are the Reasoner sub-agent.\n\nGiven a question (and choices, optional context), "
+           "produce a short neutral scaffold.")
+
+RUNTIME_SCI = [(_RT_OLD,
+    "You are the Reasoner sub-agent for graduate-level science (physics, chemistry, biology) "
+    "multiple-choice questions.\n\nGiven a science question (and choices, optional context), "
+    "produce a short neutral scaffold focusing on scientific principles, formulas, and mechanisms.")]
+
+RUNTIME_LEGAL = [(_RT_OLD,
+    "You are the Reasoner sub-agent for legal reasoning multiple-choice questions.\n\n"
+    "Given a legal question (and choices, optional context), produce a short neutral scaffold "
+    "focusing on the governing rule, its doctrinal elements, and how the facts map onto them.")]
+
+RUNTIME_MMLU = [(_RT_OLD,
+    "You are the Reasoner sub-agent for academic multiple-choice questions across diverse "
+    "subjects (STEM, humanities, social sciences, business, and law).\n\n"
+    "Given a question (and choices, optional context), produce a short neutral scaffold "
+    "focusing on the relevant subject-matter principles, definitions, and computations.")]
 
 def apply(src, dst, edits):
     text = (V / src).read_text()
@@ -42,6 +79,11 @@ def apply(src, dst, edits):
     (V / dst).write_text(text)
     print(f"[OK] {dst}")
 
-apply("reasoner_medical.py",        "reasoner_generic.py",        MED2GEN)
-apply("reasoner_generic.py",        "reasoner_science.py",        GEN2SCI)
+apply("reasoner_medical.py", "reasoner_generic.py", MED2GEN)
+apply("reasoner_generic.py", "reasoner_science.py", GEN2SCI)
+apply("reasoner_generic.py", "reasoner_legal.py",   GEN2LEGAL)
+apply("reasoner_generic.py", "reasoner_mmlu.py",    GEN2MMLU)
+
 apply("runtime_prompts_neutral.py", "runtime_prompts_science.py", RUNTIME_SCI)
+apply("runtime_prompts_neutral.py", "runtime_prompts_legal.py",   RUNTIME_LEGAL)
+apply("runtime_prompts_neutral.py", "runtime_prompts_mmlu.py",    RUNTIME_MMLU)
