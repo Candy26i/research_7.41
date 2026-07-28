@@ -28,7 +28,7 @@ def complete(client, model, messages, max_tokens):
     msg = response.choices[0].message
     content = msg.content or ""
     reasoning = getattr(msg, "reasoning_content", "") or ""
-    return content if coent.strip() else reasoning
+    return content if content.strip() else reasoning
 
 
 def main(input_file, output_file, model, max_tokens, base_url, api_key, workers, retries):
@@ -50,6 +50,9 @@ def main(input_file, output_file, model, max_tokens, base_url, api_key, workers,
                 except Exception:
                     pass
         print(f"[RESUME] {len(done)} already done, skipping them", flush=True)
+        if len(done) >= len(examples):
+            print("[WARN] output already covers every input id. If you changed the prompt "
+                  "condition, move/delete the output file first.", flush=True)
 
     todo = [e for e in examples if e.get("example_id") not in done]
     print(f"[PLAN] {len(todo)} to generate (of {len(examples)} total)", flush=True)
